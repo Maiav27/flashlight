@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TouchableOpacity , Alert} from 'react-native';
 import { useState, useEffect } from 'react';
 import Torch from 'react-native-torch';
+import RNShake from 'react-native-shake'
 
 export default function App() {
 
@@ -10,6 +11,14 @@ export default function App() {
    Torch.switchState(toogle)
      
   }, [toogle])
+
+  useEffect(() =>{
+    const subscription = RNShake.addListener(()=> {
+      setToogle(!toogle)
+    })
+
+    return () => subscription.remove()
+  }, [])
   return (
      <TouchableOpacity style={toogle ? styles.containerLight : styles.container } onPress={() => setToogle(!toogle)}>
           <Image style={toogle ? styles.lightinOn : styles.lightinOff} source={ toogle ? require('./assets/eco-light.png') :require('./assets/eco-light-off.png')}/>
